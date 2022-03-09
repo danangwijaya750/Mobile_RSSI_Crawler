@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Dataset Collector</string>
+    <string-array name="floors_name">
+        <item>1F Floor</item>
+        <item>6F Floor</item>
+        <item>7F Floor</item>
+        <item>8F Floor</item>
+    </string-array>
+</resources>
