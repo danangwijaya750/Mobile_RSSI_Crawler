@@ -49,16 +49,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private var accelSensor:Sensor?=null
     private var gyroSensor:Sensor?=null
     private var pressureSensor:Sensor?=null
-    private var isCollecting=false
     private val floors= arrayOf(R.drawable.onef1_full,R.drawable.sixf6_full,R.drawable.sevenf7_full,R.drawable.eightf8_full)
     private var selectedFloor=0
     private val currentGeo= mutableListOf<Float>()
     private val currentAccel= mutableListOf<Float>()
     private val currentGyro= mutableListOf<Float>()
     private val scannedBle= mutableListOf<BleData>()
+    private val dataSets= mutableListOf<DataSet>()
     private var isScanning=false
     private lateinit var bleManager:BleManager
     private var curLatLng=LatLng(0.0,0.0)
+    private var fileName=""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +84,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     companion object {
         private const val REQUEST_CODE_PERMISSION_LOCATION = 2
         private const val REQUEST_CODE_OPEN_GPS = 1
+        const val DIRECTORY=""
     }
 
     private fun checkPermissions() {
@@ -91,7 +93,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             toast("Please turn on Bluetooth first")
             return
         }
-
         val permissions = arrayOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -248,6 +249,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         override fun onScanFinished(scanResultList: List<BleDevice>) {
             Log.e("ble","scanning finished")
+            addData(scanResultList)
             if(isScanning){
                 Log.e("ble","rescan")
                 bleManager.scan(this)
@@ -267,11 +269,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 .position(it).title("Dropped Pin"))
             val sheetView = LayoutDialogBinding.inflate(layoutInflater)
             val dialog = BottomSheetDialog(this)
+            curLatLng= LatLng(it.latitude,it.longitude)
             dialog.setContentView(sheetView.root)
             sheetView.tvLatLng.text = "Current Lat/Lng : ${it.latitude}, ${it.latitude}"
             sheetView.tvTime.text=Calendar.getInstance().time.toString()
             sheetView.btnStart.setOnClickListener {
-                isCollecting=!isCollecting
+                fileName="${sheetView.tvTime}_${binding.spinnerFloor.selectedItem}.csv"
+                dataSets.clear()
                 sheetView.btnStart.toGone()
                 sheetView.btnStop.toVisible()
                 sensorStartListening()
@@ -279,12 +283,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 scanning()
             }
             sheetView.btnStop.setOnClickListener {
-                isCollecting=!isCollecting
                 sheetView.btnStart.toVisible()
                 sheetView.btnStop.toGone()
                 isScanning=!isScanning
                 bleManager.cancelScan()
                 sensorStopListening()
+                writingFile()
             }
             dialog.show()
         })
@@ -313,5 +317,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     }
 
+    private fun writingFile(){
+        val writer=FileWriter(this)
+        val result=writer.writeToFile(dataSets, fileName)
+        toast("File tersimpan di $result")
+    }
+    private fun addData(bleDevices:List<BleDevice>){
+        resetScanned()
+        scannedBle.forEach { fixed->
+            bleDevices.forEach scanned@{ scanned->
+                if(fixed.mac.equals(scanned.mac,true)){
+                    fixed.rssi=scanned.rssi.toString()
+                    return@scanned
+                }
+            }
+        }
+        dataSets.add(DataSet(Calendar.getInstance().time.toString(),curLatLng.latitude,curLatLng.longitude,
+            scannedBle,currentGeo,currentAccel,currentGyro))
+        Log.e("dataset collected",dataSets.size.toString())
+    }
+    private fun resetScanned(){
+        scannedBle.clear()
+        fixedMAC.forEach {
+            scannedBle.add(BleData(it,"100"))
+        }
+    }
 
 }
