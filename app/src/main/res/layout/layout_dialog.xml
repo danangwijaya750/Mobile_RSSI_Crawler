@@ -5,6 +5,7 @@
     android:focusable="false"
     android:focusableInTouchMode="true">
     <TextView
+        android:layout_marginTop="20dp"
         android:id="@+id/login_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

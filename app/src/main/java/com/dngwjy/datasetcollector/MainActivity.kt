@@ -1,6 +1,7 @@
 package com.dngwjy.datasetcollector
 
 import android.Manifest
+import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
@@ -18,6 +19,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.clj.fastble.BleManager
@@ -34,8 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,SensorEventListener {
-    private val fixedMAC= mutableListOf<String>()
-
+    private val fixedMAC= mutableListOf<String>("78:02:B7:2A:04:4A","A0:78:17:5B:E1:22")
     private lateinit var binding: ActivityMainBinding
     private var mapView:GoogleMap?=null
     private val northEast=LatLng(25.01208680666584, 121.541765599863)
@@ -60,11 +61,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var bleManager:BleManager
     private var curLatLng=LatLng(0.0,0.0)
     private var fileName=""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         val mf=supportFragmentManager.findFragmentById(R.id.maps_view)
         as SupportMapFragment
         mf.getMapAsync(this)
@@ -268,19 +269,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             pinMarker = mapView?.addMarker(MarkerOptions()
                 .position(it).title("Dropped Pin"))
             val sheetView = LayoutDialogBinding.inflate(layoutInflater)
-            val dialog = BottomSheetDialog(this)
             curLatLng= LatLng(it.latitude,it.longitude)
+            val dialog=Dialog(this)
             dialog.setContentView(sheetView.root)
             sheetView.tvLatLng.text = "Current Lat/Lng : ${it.latitude}, ${it.latitude}"
             sheetView.tvTime.text=Calendar.getInstance().time.toString()
             sheetView.btnStart.setOnClickListener {
-                fileName="${sheetView.tvTime}_${binding.spinnerFloor.selectedItem}.csv"
+                fileName="${sheetView.tvTime.text}_${binding.spinnerFloor.selectedItem.toString()}.csv"
                 dataSets.clear()
                 sheetView.btnStart.toGone()
                 sheetView.btnStop.toVisible()
                 sensorStartListening()
                 isScanning=!isScanning
                 scanning()
+                dialog.setCancelable(false)
             }
             sheetView.btnStop.setOnClickListener {
                 sheetView.btnStart.toVisible()
@@ -289,6 +291,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 bleManager.cancelScan()
                 sensorStopListening()
                 writingFile()
+                dialog.setCancelable(true)
             }
             dialog.show()
         })

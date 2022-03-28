@@ -29,7 +29,7 @@ class FileWriter(private val context: Context) {
                 it.geomagnetic.forEach { geo->
                     geos="$geos;$geo"
                 }
-                out.println("${it.time_stamp};${it.latitude};${it.longitude};${bles};${accels};${geos};${gyros}")
+                out.println("${it.time_stamp};${it.latitude};${it.longitude}${bles}${accels};${geos};${gyros}")
             }
         }
         return exportedFile.absolutePath
