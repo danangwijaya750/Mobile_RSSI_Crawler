@@ -18,6 +18,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
@@ -39,10 +40,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private val fixedMAC= mutableListOf<String>("78:02:B7:2A:04:4A","A0:78:17:5B:E1:22")
     private lateinit var binding: ActivityMainBinding
     private var mapView:GoogleMap?=null
-    private val northEast=LatLng(25.01208680666584, 121.541765599863)
-    private val northWest=LatLng(25.01219375599751, 121.54165294708444)
-    private val southWest=LatLng(25.011707093458693, 121.5410867174273)
-    private val southEast=LatLng(25.011595368321558, 121.5412002293108)
+    private val southEast=arrayOf(LatLng(25.011595368321558, 121.5412002293108),LatLng(-7.7711145195780365, 110.38687669236386))
     private var pinMarker:Marker?=null
     private lateinit var floorOverlay: GroundOverlayOptions
     private var sensorManager: SensorManager? = null
@@ -50,8 +48,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private var accelSensor:Sensor?=null
     private var gyroSensor:Sensor?=null
     private var pressureSensor:Sensor?=null
-    private val floors= arrayOf(R.drawable.onef1_full,R.drawable.sixf6_full,R.drawable.sevenf7_full,R.drawable.eightf8_full)
+    private var floorsName= arrayOf(
+        arrayOf("1F Floor","6F Floor", "7F Floor","8F Floor"),
+        arrayOf("Lt.1 Floor","Lt.2 Floor", "Lt.3 Floor"))
+    private val floors= arrayOf(
+        //tw
+        arrayOf(R.drawable.onef1_full,R.drawable.sixf6_full,R.drawable.sevenf7_full,R.drawable.eightf8_full),
+        //idb
+        arrayOf(R.drawable.onef1_full,R.drawable.sixf6_full,R.drawable.sevenf7_full,R.drawable.eightf8_full))
     private var selectedFloor=0
+    private var selectedBuilding=0
     private val currentGeo= mutableListOf<Float>()
     private val currentAccel= mutableListOf<Float>()
     private val currentGyro= mutableListOf<Float>()
@@ -71,6 +77,26 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         mf.getMapAsync(this)
         initSensor()
         checkPermissions()
+        binding.spinnerBuilding.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                selectedBuilding=p2
+                changeFloorSpinnerItems()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+
+    }
+
+    private fun changeFloorSpinnerItems(){
+        val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, floorsName[selectedBuilding])
+        // Set layout to use when the list of choices appear
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Set Adapter to Spinner
+        binding.spinnerFloor.setAdapter(aa)
         binding.spinnerFloor.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -300,9 +326,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private fun drawFloor(){
         mapView?.clear()
         floorOverlay=GroundOverlayOptions()
-            .image(BitmapDescriptorFactory.fromResource(floors[selectedFloor]))
+            .image(BitmapDescriptorFactory.fromResource(floors[selectedBuilding][selectedFloor]))
             .anchor(1f,1f)
-            .position(southEast,18f,80f)
+            .position(southEast[selectedBuilding],18f,80f)
             .bearing(47f)
         mapView?.addGroundOverlay(floorOverlay)
 

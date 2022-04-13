@@ -1,9 +1,18 @@
 <resources>
     <string name="app_name">Dataset Collector</string>
-    <string-array name="floors_name">
+    <string-array name="floors_name_tw">
         <item>1F Floor</item>
         <item>6F Floor</item>
         <item>7F Floor</item>
         <item>8F Floor</item>
+    </string-array>
+    <string-array name="floors_name_idb">
+        <item>Lt.1 Floor</item>
+        <item>Lt.2 Floor</item>
+        <item>Lt.3 Floor</item>
+    </string-array>
+    <string-array name="building_name">
+        <item>NTUST</item>
+        <item>Electronics and Electric Lab</item>
     </string-array>
 </resources>
