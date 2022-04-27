@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private val fixedMAC= mutableListOf<String>("78:02:B7:2A:04:4A","A0:78:17:5B:E1:22")
     private lateinit var binding: ActivityMainBinding
     private var mapView:GoogleMap?=null
-    private val southEast=arrayOf(LatLng(25.011595368321558, 121.5412002293108),LatLng(-7.7711145195780365, 110.38687669236386))
+    private val southEast=arrayOf(LatLng(25.011595368321558, 121.5412002293108),LatLng(-7.7711140765450395, 110.38687646895046))
     private var pinMarker:Marker?=null
     private lateinit var floorOverlay: GroundOverlayOptions
     private var sensorManager: SensorManager? = null
@@ -55,9 +55,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         //tw
         arrayOf(R.drawable.onef1_full,R.drawable.sixf6_full,R.drawable.sevenf7_full,R.drawable.eightf8_full),
         //idb
-        arrayOf(R.drawable.onef1_full,R.drawable.sixf6_full,R.drawable.sevenf7_full,R.drawable.eightf8_full))
+        arrayOf(R.drawable.idb_lt1,R.drawable.idb_lt2,R.drawable.idb_lt3))
+    private val bearings= arrayOf(47f,13.5f)
+    private val buildingWH= arrayOf(arrayOf(18f,80f), arrayOf(15f,50f))
     private var selectedFloor=0
     private var selectedBuilding=0
+    private var selectedBearing=0f
     private val currentGeo= mutableListOf<Float>()
     private val currentAccel= mutableListOf<Float>()
     private val currentGyro= mutableListOf<Float>()
@@ -80,6 +83,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         binding.spinnerBuilding.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 selectedBuilding=p2
+                selectedBearing=bearings[p2]
                 changeFloorSpinnerItems()
             }
 
@@ -93,10 +97,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     private fun changeFloorSpinnerItems(){
         val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, floorsName[selectedBuilding])
-        // Set layout to use when the list of choices appear
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Set Adapter to Spinner
-        binding.spinnerFloor.setAdapter(aa)
+        binding.spinnerFloor.adapter = aa
+        if(selectedBuilding==0){
+            mapView?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(25.0119275,121.5414292),19f))
+        }else{
+            mapView?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(-7.7711140765450395, 110.38687646895046),19f))
+        }
         binding.spinnerFloor.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -298,7 +305,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             curLatLng= LatLng(it.latitude,it.longitude)
             val dialog=Dialog(this)
             dialog.setContentView(sheetView.root)
-            sheetView.tvLatLng.text = "Current Lat/Lng : ${it.latitude}, ${it.latitude}"
+            sheetView.tvLatLng.text = "Current Lat/Lng : ${it.latitude}, ${it.longitude}"
             sheetView.tvTime.text=Calendar.getInstance().time.toString()
             sheetView.btnStart.setOnClickListener {
                 fileName="${sheetView.tvTime.text}_${binding.spinnerFloor.selectedItem.toString()}.csv"
@@ -328,8 +335,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         floorOverlay=GroundOverlayOptions()
             .image(BitmapDescriptorFactory.fromResource(floors[selectedBuilding][selectedFloor]))
             .anchor(1f,1f)
-            .position(southEast[selectedBuilding],18f,80f)
-            .bearing(47f)
+            .position(southEast[selectedBuilding],buildingWH[selectedBuilding][0],buildingWH[selectedBuilding][1])
+            .bearing(selectedBearing)
         mapView?.addGroundOverlay(floorOverlay)
 
     }
