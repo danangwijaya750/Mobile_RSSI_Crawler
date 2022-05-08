@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private lateinit var bleManager:BleManager
     private var curLatLng=LatLng(0.0,0.0)
     private var fileName=""
+    private var maxData=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
@@ -312,6 +313,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 dataSets.clear()
                 sheetView.btnStart.toGone()
                 sheetView.btnStop.toVisible()
+                if(sheetView.etInputMaxData.text.isBlank().not()) {
+                    maxData = sheetView.etInputMaxData.text.toString().toInt()
+                }
                 sensorStartListening()
                 isScanning=!isScanning
                 scanning()
@@ -370,6 +374,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
         dataSets.add(DataSet(Calendar.getInstance().time.toString(),curLatLng.latitude,curLatLng.longitude,
             scannedBle,currentGeo,currentAccel,currentGyro))
+        if(maxData != 0) {
+            dataSets.take(maxData)
+        }
         Log.e("dataset collected",dataSets.size.toString())
     }
     private fun resetScanned(){

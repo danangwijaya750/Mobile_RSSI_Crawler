@@ -44,6 +44,25 @@
             android:text="Current Lat/Lng : "
             android:id="@+id/tv_lat_lng"
             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Max Data : "
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:id="@+id/et_input_max_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp"
+            android:padding="8dp"
+            android:inputType="number"
+            android:background="@drawable/bg_rounded_stroke_grey"/>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.google.android.material.button.MaterialButton
