@@ -44,7 +44,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     //maps
-    implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
     //ble
     implementation 'com.clj.fastble:FastBleLib:2.3.4'
+    implementation 'org.slf4j:slf4j-api:1.7.36' // slf4j 2.x not yet supported
+    implementation 'com.github.tony19:logback-android:2.0.1'
 }

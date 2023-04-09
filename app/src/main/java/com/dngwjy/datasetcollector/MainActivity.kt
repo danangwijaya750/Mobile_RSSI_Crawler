@@ -3,14 +3,17 @@ package com.dngwjy.datasetcollector
 import android.Manifest
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.LocationManager
+import android.net.wifi.WifiManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,6 +26,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import com.clj.fastble.BleManager
 import com.clj.fastble.callback.BleScanCallback
 import com.clj.fastble.data.BleDevice
@@ -65,12 +69,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private val currentAccel= mutableListOf<Float>()
     private val currentGyro= mutableListOf<Float>()
     private val scannedBle= mutableListOf<BleData>()
+    private val scannedWifi= mutableListOf<WifiData>()
     private val dataSets= mutableListOf<DataSet>()
     private var isScanning=false
     private lateinit var bleManager:BleManager
     private var curLatLng=LatLng(0.0,0.0)
     private var fileName=""
     private var maxData=0
+    private lateinit var wifiManger :WifiManager
+    private var bleMode=false
+    private var wifiMode=false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
@@ -187,6 +195,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     private fun initSensor(){
         bleManager= BleManager.getInstance()
+
+        wifiManger= applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+
         sensorManager=getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         val availableSensor = sensorManager?.getSensorList(Sensor.TYPE_ALL)
@@ -223,9 +234,26 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         logE("started")
     }
 
+    private val wifiScanReceiver = object : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED,true)
+            if (success) {
+                val result = wifiManger.scanResults
+                logE(result.toString())
+                result.forEach{
+                    scannedWifi.add(WifiData(it.BSSID,it.level.toString()))
+                }
+                addData()
+            }else {
+                logE(wifiManger.scanResults.toString())
+            }
+        }
+
+    }
+
     private val geoListener = object:SensorEventListener{
         override fun onSensorChanged(event: SensorEvent) {
-            Log.e("Geo", "onSensorChanged: ${event.values.size}")
+            //Log.e("Geo", "onSensorChanged: ${event.values.size}")
             currentGeo.clear()
             currentGeo.addAll(event.values.toList())
         }
@@ -235,7 +263,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
     private val accelListener= object:SensorEventListener{
         override fun onSensorChanged(event: SensorEvent) {
-            Log.e("Accel", "onSensorChanged: ${event.values.size}")
+            //Log.e("Accel", "onSensorChanged: ${event.values.size}")
             currentAccel.clear()
             currentAccel.addAll(event.values.toList())
         }
@@ -245,7 +273,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
     private val gyroListener=object:SensorEventListener{
         override fun onSensorChanged(event: SensorEvent) {
-            Log.e("Gyro", "onSensorChanged: ${event.values.size}")
+            //Log.e("Gyro", "onSensorChanged: ${event.values.size}")
             currentGyro.clear()
             currentGyro.addAll(event.values.toList())
         }
@@ -255,7 +283,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
     private val pressureListener=object:SensorEventListener{
         override fun onSensorChanged(event: SensorEvent) {
-            Log.e("Pressure", "onSensorChanged: ${event.values.size}")
+            //Log.e("Pressure", "onSensorChanged: ${event.values.size}")
         }
 
         override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
@@ -284,12 +312,20 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
         override fun onScanFinished(scanResultList: List<BleDevice>) {
             Log.e("ble","scanning finished")
-            addData(scanResultList)
-            if(isScanning){
-                Log.e("ble","rescan")
-                bleManager.scan(this)
+            logE(scanResultList.toString())
+            setBleScanned(scanResultList)
+            if(wifiMode){
+                wifiManger.startScan()
+            }else {
+                addData()
             }
         }
+    }
+    private fun setBleScanned(scanResultList: List<BleDevice>){
+        scanResultList.forEach {
+            scannedBle.add(BleData(it.mac,it.rssi.toString()))
+        }
+        logE("BLE data $scannedBle")
     }
 
 
@@ -308,6 +344,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             dialog.setContentView(sheetView.root)
             sheetView.tvLatLng.text = "Current Lat/Lng : ${it.latitude}, ${it.longitude}"
             sheetView.tvTime.text=Calendar.getInstance().time.toString()
+            sheetView.cbBleMode.setOnCheckedChangeListener { _, b ->
+                bleMode=b
+            }
+            sheetView.cbWifiMode.setOnCheckedChangeListener { _, b ->
+                wifiMode=b
+            }
             sheetView.btnStart.setOnClickListener {
                 fileName="${sheetView.tvTime.text}_${binding.spinnerFloor.selectedItem.toString()}.csv"
                 dataSets.clear()
@@ -318,14 +360,28 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                 }
                 sensorStartListening()
                 isScanning=!isScanning
-                scanning()
+                if (bleMode){
+                    scanning()
+                }
+                if(wifiMode){
+                    val intentFilter = IntentFilter()
+                    intentFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
+                    registerReceiver(wifiScanReceiver, intentFilter)
+                    wifiManger.startScan()
+                }
+
                 dialog.setCancelable(false)
             }
             sheetView.btnStop.setOnClickListener {
+                if (wifiMode){
+                    unregisterReceiver(wifiScanReceiver)
+                }
+                if(bleMode){
+                    isScanning=!isScanning
+                    bleManager.cancelScan()
+                }
                 sheetView.btnStart.toVisible()
                 sheetView.btnStop.toGone()
-                isScanning=!isScanning
-                bleManager.cancelScan()
                 sensorStopListening()
                 writingFile()
                 dialog.setCancelable(true)
@@ -359,31 +415,41 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
 
     private fun writingFile(){
         val writer=FileWriter(this)
+        logE(dataSets.toString())
         val result=writer.writeToFile(dataSets, fileName)
         toast("File tersimpan di $result")
     }
-    private fun addData(bleDevices:List<BleDevice>){
-        resetScanned()
-        scannedBle.forEach { fixed->
-            bleDevices.forEach scanned@{ scanned->
-                if(fixed.mac.equals(scanned.mac,true)){
-                    fixed.rssi=scanned.rssi.toString()
-                    return@scanned
-                }
+    private fun addData(){
+//        scannedBle.forEach { fixed->
+//            bleDevices.forEach scanned@{ scanned->
+//                if(fixed.mac.equals(scanned.mac,true)){
+//                    fixed.rssi=scanned.rssi.toString()
+//                    return@scanned
+//                }
+//            }
+//        }
+        logE("add data$scannedBle")
+        logE("add data $scannedWifi")
+        dataSets
+            .add(DataSet(Calendar.getInstance().time.toString(),
+                curLatLng.latitude,curLatLng.longitude,
+            scannedBle.toMutableList(), scannedWifi.toMutableList(),currentGeo,currentAccel,currentGyro))
+        if(isScanning) {
+            if (bleMode) {
+                readBle()
+            }else if(wifiMode){
+                wifiManger.startScan()
             }
         }
-        dataSets.add(DataSet(Calendar.getInstance().time.toString(),curLatLng.latitude,curLatLng.longitude,
-            scannedBle,currentGeo,currentAccel,currentGyro))
-        if(maxData != 0) {
-            dataSets.take(maxData)
-        }
+        resetScanned()
         Log.e("dataset collected",dataSets.size.toString())
     }
     private fun resetScanned(){
         scannedBle.clear()
-        fixedMAC.forEach {
-            scannedBle.add(BleData(it,"100"))
-        }
+        scannedWifi.clear()
+//        fixedMAC.forEach {
+//            scannedBle.add(BleData(it,"100"))
+//        }
     }
 
 }

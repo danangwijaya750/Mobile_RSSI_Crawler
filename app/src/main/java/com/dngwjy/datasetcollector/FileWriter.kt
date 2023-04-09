@@ -1,6 +1,7 @@
 package com.dngwjy.datasetcollector
 
 import android.content.Context
+import org.slf4j.LoggerFactory
 import java.io.File
 
 class FileWriter(private val context: Context) {
@@ -17,9 +18,15 @@ class FileWriter(private val context: Context) {
                 var gyros=""
                 var geos=""
                 var accels=""
+                var wifis=""
                 it.bles.forEach { bleData ->
                     bles="$bles;$bleData"
                 }
+                logE(bles)
+                it.wifis.forEach { wifiData->
+                    wifis="$wifis;$wifiData"
+                }
+                logE(wifis)
                 it.accel.forEach { accel->
                     accels="$accels;$accel"
                 }
@@ -29,7 +36,7 @@ class FileWriter(private val context: Context) {
                 it.geomagnetic.forEach { geo->
                     geos="$geos;$geo"
                 }
-                out.println("${it.time_stamp};${it.latitude};${it.longitude}${bles}${accels};${geos};${gyros}")
+                out.println("${it.time_stamp};${it.latitude};${it.longitude}${bles}${wifis}${accels};${geos};${gyros}")
             }
         }
         return exportedFile.absolutePath
