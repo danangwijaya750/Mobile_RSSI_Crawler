@@ -420,14 +420,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         toast("File tersimpan di $result")
     }
     private fun addData(){
-//        scannedBle.forEach { fixed->
-//            bleDevices.forEach scanned@{ scanned->
-//                if(fixed.mac.equals(scanned.mac,true)){
-//                    fixed.rssi=scanned.rssi.toString()
-//                    return@scanned
-//                }
-//            }
-//        }
         logE("add data$scannedBle")
         logE("add data $scannedWifi")
         dataSets
