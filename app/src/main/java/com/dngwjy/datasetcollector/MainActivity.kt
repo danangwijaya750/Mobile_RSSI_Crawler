@@ -136,9 +136,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             toast("Please turn on Bluetooth first")
             return
         }
-        val permissions = arrayOf(
+        val permissions = mutableListOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+           )
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.S) {
+            permissions.add(Manifest.permission.BLUETOOTH_SCAN)
+            permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
+        }
         val permissionDeniedList = ArrayList<String>()
         for (permission in permissions) {
             val permissionCheck = this.let {
