@@ -7,7 +7,6 @@
     android:keepScreenOn="true"
     tools:context=".MainActivity">
 
-
     <fragment
         android:id="@+id/maps_view"
         class="com.google.android.gms.maps.SupportMapFragment"
@@ -32,15 +31,22 @@
         <androidx.appcompat.widget.AppCompatSpinner
             android:layout_width="match_parent"
             android:layout_margin="5dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:entries="@array/building_name"
             android:id="@+id/spinner_building"
             />
         <androidx.appcompat.widget.AppCompatSpinner
             android:layout_width="match_parent"
             android:layout_margin="5dp"
-            android:layout_height="50dp"
+            android:layout_height="45dp"
             android:id="@+id/spinner_floor"
+            />
+        <Switch
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sw_show_points"
+            android:text="Show Points"
+            android:checked="true"
             />
     </androidx.appcompat.widget.LinearLayoutCompat>
 

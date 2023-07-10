@@ -1,11 +1,13 @@
-package com.dngwjy.datasetcollector
+package com.dngwjy.datasetcollector.data
 
 data class BleData(
     var mac:String,
-    var rssi:String
+    var device:String?,
+    var rssi:String,
 )
 data class WifiData(
     var mac: String,
+    var ssid:String,
     var rssi: String
 )
 

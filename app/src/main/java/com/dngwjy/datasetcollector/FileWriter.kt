@@ -1,12 +1,12 @@
 package com.dngwjy.datasetcollector
 
 import android.content.Context
-import org.slf4j.LoggerFactory
+import com.dngwjy.datasetcollector.data.DataSet
 import java.io.File
 
 class FileWriter(private val context: Context) {
 
-    fun writeToFile(data:List<DataSet>,title:String):String{
+    fun writeToFile(data:List<DataSet>, title:String):String{
         val uri = File(context.getExternalFilesDir(null).toString() + MainActivity.DIRECTORY)
         if (!uri.exists()) {
             uri.mkdirs()
@@ -36,7 +36,7 @@ class FileWriter(private val context: Context) {
                 it.geomagnetic.forEach { geo->
                     geos="$geos;$geo"
                 }
-                out.println("${it.time_stamp};${it.latitude};${it.longitude}${bles}${wifis}${accels};${geos};${gyros}")
+                out.println("${it.time_stamp};${it.latitude};${it.longitude}${bles}${wifis}${accels}${geos}${gyros}")
             }
         }
         return exportedFile.absolutePath
