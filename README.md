@@ -32,6 +32,10 @@ This project involves the development of a mobile Android app for RSSI data craw
 5. [Convert crawled data to .csv format]()
 
 ## App Demo :
-##
+## Crawling Method :
+## Crawling Result :
+## Data Cleansing :
+## Data Preprocessing :
+## Model Training :
 
 
