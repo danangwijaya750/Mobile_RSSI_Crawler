@@ -11,10 +11,10 @@ To perform RSSI data crawl the mobile phone must have the following features:
 | No  | Sensor and Hardware        | Function                                                             |
 | --- | -------------------------- | -------------------------------------------------------------------- |
 | 1.  | Wi-Fi                      | Perform the Wifi device features                                     |
-| 2.  | Bluetooth                  | Perfrom the Bluetooth device features                                |
-| 3.  | GPS Location               | Perfrom the GPS features (Required for BLE Scanning)                 |
-| 4.  | Storage                    | Perfrom the read and write to device storage                         |
-| 5.  | High Sampling Rate Sensors | Perfrom the high sampling rate sensors (Gyro, Accelero, Geomagnetic) |
+| 2.  | Bluetooth                  | Perform the Bluetooth device features                                |
+| 3.  | GPS Location               | Perform the GPS features (Required for BLE Scanning)                 |
+| 4.  | Storage                    | Perform the read and write to device storage                         |
+| 5.  | High Sampling Rate Sensors | Perform the high sampling rate sensors (Gyro, Accelerometer, Geomagnetic) |
 
 ## Required App Permission
 According to [Official Android Docs](https://developer.android.com/training/permissions/declaring) App Permissions are declared on [AndroidManifest.xml](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/app/src/main/AndroidManifest.xml) file.
