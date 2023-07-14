@@ -1,4 +1,3 @@
-![](https://i.imgur.com/JORnn3y.png =150x)@NTUST
 # Mobile device sensors and hardware permissions
 ## Introduction
 App permissions help support **user privacy** by **protecting access** to the following:
