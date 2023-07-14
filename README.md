@@ -26,8 +26,8 @@ This project involves the development of a mobile Android app for RSSI data craw
     ```
 ## App Components :
 1. [Device sensors and hardware permissions](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/docs/AppPermission.md)
-2. [Wi-Fi and BLE Listener Functions]()
-3. [RSSI Data Structure]() 
+2. [Wi-Fi and BLE Listener Functions](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/docs/ScanListenerFunctions.md)
+3. [RSSI Data Structure](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/docs/RSSIDataStructure.md) 
 4. [MapView and Floor Plan]()
 5. [Convert crawled data to .csv format]()
 
