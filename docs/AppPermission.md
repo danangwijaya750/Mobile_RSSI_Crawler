@@ -33,6 +33,6 @@ Android Manifest Permission [Docs](https://developer.android.com/reference/andro
 
 ## Setup Permission Request
 The App permission request is handled by `checkPermission()` method in [MainActivity.kt](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/app/src/main/java/com/dngwjy/datasetcollector/MainActivity.kt#L133).
-in this method is to check all permission that declared in [AndroidManifest.xml](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/app/src/main/AndroidManifest.xml) is granted or not.
+in this method is to check all permission that declared in [AndroidManifest.xml](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/app/src/main/AndroidManifest.xml) is granted or not.\
 ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWZmYTdkMDM1ZmIzM2RiYjc0ZTM2ZDU3ZTg5MmExMjkyYzAwYzc0MCZlcD12MV9pbnRlcm5hbF9naWZzX2dpZklkJmN0PWc/eKfCdW4SrtGCcF1sZu/giphy.gif)
 

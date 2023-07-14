@@ -14,7 +14,7 @@ The app only have 1 Activity that contain several components :
 
 - **Data Collector Dialog**
   The dialog layout is **separated** on [layout_dialog.xml](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/app/src/main/res/layout/layout_dialog.xml) file.\
-  ![](https://i.imgur.com/3XM2iIX.png)
+  ![](https://i.imgur.com/3XM2iIX.png) \
   This layout will inflated to **MainActivity** with [**AlertDialog**](https://developer.android.com/reference/android/app/AlertDialog) using **setContentView()** method. to inflate the layout is in [MainActivity.kt](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/app/src/main/java/com/dngwjy/datasetcollector/MainActivity.kt#L349).
 
 - **Google Maps MapView**
