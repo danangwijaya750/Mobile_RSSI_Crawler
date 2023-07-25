@@ -11,6 +11,21 @@ This project involves the development of a mobile Android app for RSSI data craw
 3. [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) Coroutines is used to handle the async or non-blocking processes.
 4. [Fuel](https://github.com/kittinunf/fuel) Fuel is HTTP Networking library for kotlin and baked by Kotlinx Coroutines.
 5. [GSON](https://github.com/google/gson) Gson is a Java library that can be used to convert Java Objects into their JSON representation. It can also be used to convert a JSON string to an equivalent Java object.
+
+## Project Structure
+```bash
+|__ app #Application module
+|   |__ build #Module level build output directory
+|   |__ libs #Any external libraries (.jar) file.
+|   |__ src #Sourcecode of the application module
+|   |   |__ main #main sourcecode
+|   |   |__ test #Unit test code
+|   |   |__ androidTest #Instrument test code
+|__ docs #Markdown file for documentation
+|__ build #Project level build output directory
+|__ gradle #gradle properties file
+```
+
 ## Setup
 1. Clone the repo.
     ```
@@ -24,6 +39,7 @@ This project involves the development of a mobile Android app for RSSI data craw
     ```
     ./gradlew clean
     ```
+
 ## App Components :
 1. [Device sensors and hardware permissions](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/docs/AppPermission.md)
 2. [Wi-Fi and BLE Listener Functions](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/docs/ScanListenerFunctions.md)
@@ -32,6 +48,7 @@ This project involves the development of a mobile Android app for RSSI data craw
 5. [Convert crawled data to .csv format](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/docs/CsvFileWriter.md)
 
 ## App Demo :
+
 ## Crawling Method :
 ## Crawling Result :
 ## Data Cleansing :
