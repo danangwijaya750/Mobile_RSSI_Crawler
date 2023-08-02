@@ -1,0 +1,13 @@
+apply plugin: 'org.jetbrains.dokka'
+
+dokkaHtml {
+    outputDirectory.set(new File("$rootProject.rootDir/dokka/$project.name"))
+
+    dokkaSourceSets {
+        configureEach {
+            jdkVersion.set(8)
+            includeNonPublic.set(true)
+            skipEmptyPackages.set(true)
+        }
+    }
+}
