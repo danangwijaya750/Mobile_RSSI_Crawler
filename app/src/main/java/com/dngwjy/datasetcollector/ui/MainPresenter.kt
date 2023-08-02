@@ -54,8 +54,13 @@ class MainPresenter(private val mainView: MainView) {
             logE("")
             Fuel.post("http://140.118.121.81:8080/api/crawling/").jsonBody(dataRequest.toJson()).response{
                 a,b, result->
-                logE(String(a.body.toByteArray()))
-                logE(result.toString())
+                val(bytes,error)=result
+                if(error!=null){
+                    mainView.resultUpload(false,error.message!!)
+                }
+                if(bytes!=null){
+                    mainView.resultUpload(true,"")
+                }
             }
         }
     }
