@@ -2,7 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
-    id("org.jetbrains.dokka") version "1.8.20"
+    id 'org.jetbrains.dokka'
 }
 
 android {
