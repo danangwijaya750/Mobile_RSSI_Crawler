@@ -1,4 +1,4 @@
-package com.dngwjy.datasetcollector
+package com.dngwjy.datasetcollector.ui
 
 import com.dngwjy.datasetcollector.data.Point
 

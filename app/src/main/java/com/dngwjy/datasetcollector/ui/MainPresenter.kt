@@ -1,12 +1,11 @@
-package com.dngwjy.datasetcollector
+package com.dngwjy.datasetcollector.ui
 
-import androidx.lifecycle.ViewModel
+import com.dngwjy.datasetcollector.data.CrawledRequest
 import com.dngwjy.datasetcollector.data.Response
+import com.dngwjy.datasetcollector.logE
 import com.github.kittinunf.fuel.Fuel
 import com.google.gson.Gson
 import kotlinx.coroutines.*
-import java.net.URL
-import kotlin.math.log
 
 
 class MainPresenter(private val mainView: MainView) {
@@ -28,4 +27,28 @@ class MainPresenter(private val mainView: MainView) {
             }
         }
     }
+    private fun sendCrawledData(data: CrawledRequest){
+        val scope = CoroutineScope(Dispatchers.Main)
+        var res =""
+        scope.launch {
+            logE("")
+            Fuel.post("http://140.118.121.81:8080/api/crawling/").body(data.toJson()).response{
+                _,_, result->
+
+            }
+        }
+    }
+
+    fun storeHandsetData(data :String){
+        val scope= CoroutineScope(Dispatchers.Main)
+        var res=""
+        scope.launch {
+            Fuel.post("http://140.118.121.81:8080/api/handsets/").body(data).response{
+                _,_,result->
+
+            }
+        }
+    }
+
+
 }

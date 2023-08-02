@@ -1,7 +1,9 @@
-package com.dngwjy.datasetcollector
+package com.dngwjy.datasetcollector.util
 
 import android.content.Context
+import com.dngwjy.datasetcollector.ui.MainActivity
 import com.dngwjy.datasetcollector.data.DataSet
+import com.dngwjy.datasetcollector.logE
 import java.io.File
 
 class FileWriter(private val context: Context) {

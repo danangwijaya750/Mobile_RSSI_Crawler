@@ -32,6 +32,7 @@ fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescri
         BitmapDescriptorFactory.fromBitmap(bitmap)
     }
 }
+
 fun LatLng.getBounds(w:Float,h:Float):LatLngBounds{
     val southWest = LatLng(this.latitude, this.longitude - (w / 111111))
     val northEast = LatLng(this.latitude + (h / 111111), this.longitude)

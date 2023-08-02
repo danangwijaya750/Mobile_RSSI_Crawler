@@ -1,4 +1,4 @@
-package com.dngwjy.datasetcollector
+package com.dngwjy.datasetcollector.ui
 
 import android.Manifest
 import android.app.Dialog
@@ -22,8 +22,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.CompoundButton
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
@@ -32,10 +30,11 @@ import com.clj.fastble.BleManager
 import com.clj.fastble.callback.BleScanCallback
 import com.clj.fastble.data.BleDevice
 import com.clj.fastble.scan.BleScanRuleConfig
+import com.dngwjy.datasetcollector.*
 import com.dngwjy.datasetcollector.data.*
 import com.dngwjy.datasetcollector.databinding.ActivityMainBinding
 import com.dngwjy.datasetcollector.databinding.LayoutDialogBinding
-import com.dngwjy.datasetcollector.databinding.LayoutFingerprintPointsBinding
+import com.dngwjy.datasetcollector.util.FileWriter
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -43,7 +42,8 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import java.util.*
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,SensorEventListener,MainView {
+class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,SensorEventListener,
+    MainView {
     private lateinit var presenter: MainPresenter
     private lateinit var binding: ActivityMainBinding
     private val definedPoints= mutableListOf<Point>()
@@ -69,9 +69,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     private var selectedFloorId="1"
     private val floors= arrayOf(
         //tw
-        arrayOf(R.drawable.onef1_full,R.drawable.sixf6_full,R.drawable.sevenf7_full,R.drawable.eightf8_full),
+        arrayOf(
+            R.drawable.onef1_full,
+            R.drawable.sixf6_full,
+            R.drawable.sevenf7_full,
+            R.drawable.eightf8_full
+        ),
         //idb
-        arrayOf(R.drawable.idb_lt1,R.drawable.idb_lt2,R.drawable.idb_lt3))
+        arrayOf(R.drawable.idb_lt1, R.drawable.idb_lt2, R.drawable.idb_lt3))
     private lateinit var crawledKeys:Array<Array<String>>
     private val bearings= arrayOf(46.3f,14.0f)
     private val buildingWH= arrayOf(arrayOf(16.3f,80.68f), arrayOf(15f,50f))
@@ -503,7 +508,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     private fun writingFile(){
-        val writer=FileWriter(this)
+        val writer= FileWriter(this)
         logE(dataSets.toString())
         val result=writer.writeToFile(dataSets, fileName)
         toast("File tersimpan di $result")
