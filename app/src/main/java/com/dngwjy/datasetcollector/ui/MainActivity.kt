@@ -565,8 +565,31 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
     /**
-     * Writes the collected data to a CSV file.
-     * @return The file path where the data is stored.
+     * Draw the floor plan and fingerprint points on the Google Map.
+     *
+     * This function is responsible for displaying the floor plan image as a ground overlay on the map.
+     * The overlay is positioned according to the selected building and floor. It also adds markers to
+     * display fingerprint points based on defined and crawled points. The color of the markers depends
+     * on whether the point has been crawled or not. If `showPoints` is true, the fingerprint points
+     * will be displayed with appropriate markers. If `showPoints` is false, only the floor plan image
+     * will be displayed without any fingerprint points.
+     *
+     * Note: This function will clear the current map and reset the overlay and markers to display the
+     * selected floor's data. It utilizes the `floors`, `southEast`, `buildingWH`, `definedPoints`,
+     * `crawledPoints`, and `selectedBuilding` variables to determine the data to be displayed.
+     *
+     * Important: Make sure that `mapView` is properly initialized and available for displaying the map
+     * before calling this function. Additionally, a marker click listener is set on the map to allow
+     * opening the crawl dialog for a specific fingerprint point.
+     *
+     * Note: The `bitmapDescriptorFromVector` function is used to create bitmap descriptors for the
+     * marker icons, which are vector drawables converted to bitmaps for custom marker icons.
+     *
+     * @see bitmapDescriptorFromVector
+     * @param showPoints A boolean flag indicating whether to display fingerprint points (true) or not (false).
+     * When set to true, the function will add markers to display fingerprint points based on defined
+     * and crawled points on the map. When set to false, only the floor plan image will be displayed
+     * without any fingerprint points.
      */
     private fun drawFloor(){
         logE("drawing")
