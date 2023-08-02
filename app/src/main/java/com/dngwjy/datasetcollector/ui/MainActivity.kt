@@ -190,8 +190,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
      * @property DIRECTORY A constant representing the directory.
      */
     companion object {
-        private const val REQUEST_CODE_PERMISSION_LOCATION = 2
-        private const val REQUEST_CODE_OPEN_GPS = 1
+        const val REQUEST_CODE_PERMISSION_LOCATION = 2
+        const val REQUEST_CODE_OPEN_GPS = 1
         const val DIRECTORY=""
     }
 
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
      * If all permissions are already granted, the function calls [onPermissionGranted] for each granted permission.
      * If any permission is denied, it requests the required permissions using the [ActivityCompat.requestPermissions] method.
      */
-    private fun checkPermissions() {
+        private fun checkPermissions() {
         val permissions = mutableListOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -490,6 +490,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             openCrawlDialog(it)
         })
     }
+    /**
+     * Opens the crawl dialog when a marker on the map is clicked.
+     * The crawl dialog allows the user to start data collection for the selected fingerprint point.
+     * @param it The LatLng object representing the latitude and longitude of the clicked marker.
+     */
     private fun openCrawlDialog(it:LatLng){
         sheetView = LayoutDialogBinding.inflate(layoutInflater)
         curLatLng= LatLng(it.latitude,it.longitude)
@@ -535,7 +540,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
         dialog.show()
     }
-    // Function to stop the data collection and write data to a file
+
+    /**
+     * Stops the data collection and writes the collected data to a CSV file.
+     * Also updates the list of crawled points and redraws the floor plan.
+     */
     private fun stopDataCrawl(){
         isScanning=false
         if (wifiMode){
@@ -554,7 +563,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         // Redraw the floor plan with updated points
         drawFloor()
     }
-    // Function to draw the floor plan and display fingerprint points
+
+    /**
+     * Writes the collected data to a CSV file.
+     * @return The file path where the data is stored.
+     */
     private fun drawFloor(){
         logE("drawing")
         // Clear the map and set a ground overlay for the floor plan image
@@ -600,8 +613,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
     }
 
-
-    // Other utility functions and helper methods
+    /**
+     * Writes the collected data to a CSV file.
+     * @return The file path where the data is stored.
+     */
     private fun writingFile(){
         if(dataSets.size>0) {
             val writer = FileWriter(this)
@@ -614,7 +629,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             toast("File saved in $result")
         }
     }
-    // Function to add data to the dataSets list
+    /**
+     * Adds data to the dataSets list.
+     * Data from scanned BLE and WiFi devices is added to the list.
+     */
     private fun addData(){
         // Add data from scanned BLE and WiFi devices to the dataSets list
         dataSets
@@ -650,7 +668,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
 
-    // Function to update the list of crawled points in shared preferences
+    /**
+     * Updates the list of crawled points in shared preferences.
+     * The crawled points are saved based on the selected building and floor.
+     */
     private fun updateCrawledPoint(){
         // Save the crawled points to shared preferences based on the selected building and floor
         when(selectedBuilding){
@@ -671,7 +692,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             }
         }
     }
-    // Implementation of other overridden functions such as onMarkerClick, onSensorChanged, etc.
+    /**
+     * Called when a marker on the map is clicked.
+     * Opens the crawl dialog for the selected marker.
+     * @param p0 The clicked marker object.
+     * @return Always returns false.
+     */
     override fun onMarkerClick(p0: Marker): Boolean {
         openCrawlDialog(p0.position)
         return false
@@ -686,11 +712,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
     }
 
 
-    // Implementation of the MainView interface functions
+    /**
+     * Implementation of the MainView interface function.
+     * Currently, this function does nothing in the MainActivity.
+     */
     override fun onLoading() {
 
     }
 
+    /**
+     * Implementation of the MainView interface function.
+     * Updates the definedPoints list with the received data and redraws the floor plan.
+     * @param data The list of defined points received from the presenter.
+     */
     override fun result(data:List<Point>) {
         runOnUiThread {
             logE(data.size.toString())
@@ -700,6 +734,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         }
     }
 
+    /**
+     * Implementation of the MainView interface function.
+     * Callback method invoked when the result of the data upload operation is available
+     * @param success A boolean indicating whether the data upload was successful or not.
+     * @param msg The message associated with the result (e.g., success message or error message).
+     * Implement this method to handle the result of the data upload operation and update the UI accordingly.
+     */
     override fun resultUpload(success: Boolean,msg:String?) {
         runOnUiThread {
             if (!success){
