@@ -10,9 +10,18 @@ import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 
-
+/**
+ * Presenter class responsible for handling business logic and communication between the view and the backend API.
+ *
+ * @param mainView The MainView interface representing the view that this presenter interacts with.
+ */
 class MainPresenter(private val mainView: MainView) {
 
+    /**
+     * Fetches points data from the backend API based on the provided ID.
+     *
+     * @param id The ID parameter used to fetch points data.
+     */
     fun getPoints(id:String){
         val scope = CoroutineScope(Dispatchers.Main)
         var res=""
@@ -30,6 +39,13 @@ class MainPresenter(private val mainView: MainView) {
             }
         }
     }
+
+    /**
+     * Sends crawled data to the backend API.
+     *
+     * @param data The list of DataSet objects containing the crawled data.
+     * @param androidVersion The version of Android OS used in the crawled data.
+     */
      fun sendCrawledData(data: MutableList<DataSet>,androidVersion:String){
         val scope = CoroutineScope(Dispatchers.Main)
          val dataRequest= RequestDataBuilder.buildSendCrawledData(data,androidVersion)
@@ -44,6 +60,11 @@ class MainPresenter(private val mainView: MainView) {
         }
     }
 
+    /**
+     * Stores handset data to the backend API.
+     *
+     * @param data The handset data to be stored in JSON format.
+     */
     fun storeHandsetData(data :String){
         val scope= CoroutineScope(Dispatchers.Main)
         var res=""

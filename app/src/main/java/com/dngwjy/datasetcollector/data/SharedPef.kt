@@ -2,7 +2,12 @@ package com.dngwjy.datasetcollector.data
 
 import android.content.Context
 
-class SharedPef(val context: Context) {
+/**
+ * Helper class to manage shared preferences in the Android app.
+ *
+ * @param context The context used to access shared preferences.
+ */
+class SharedPef(private val context: Context) {
     companion object {
         private const val PREF_NAME = "com.dngwjy.datasetcollector"
         private const val DEFINED_POINTS = "defined.points"
@@ -16,6 +21,7 @@ class SharedPef(val context: Context) {
     }
 
     private val pref = context.getSharedPreferences(PREF_NAME, 0)
+    // yes it's dirty codes but this is the easiest and quick way hehe, u can optimize for this features with RoomDB
     var definedPoints: String
         get() = pref.getString(DEFINED_POINTS, "").toString()
         set(value) = pref.edit().putString(DEFINED_POINTS, value).apply()
