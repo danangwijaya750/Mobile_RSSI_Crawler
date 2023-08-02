@@ -1,11 +1,13 @@
 package com.dngwjy.datasetcollector.data
 
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 
 
 data class CrawledRequest(
     var access_points: List<AccessPoint> = listOf(),
     var handset: Handset = Handset(),
+    @SerializedName("location")
     var location: Location = Location()
 ){
     fun toJson(): String {
@@ -22,6 +24,7 @@ data class AccessPoint(
 )
 
 data class Handset(
+    var id:String="",
     var os: String = "",
     var type: String = ""
 )

@@ -511,6 +511,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         val writer= FileWriter(this)
         logE(dataSets.toString())
         val result=writer.writeToFile(dataSets, fileName)
+        presenter.sendCrawledData(dataSets, androidVersion = android.os.Build.VERSION.CODENAME.toString())
         toast("File tersimpan di $result")
     }
     private fun addData(){

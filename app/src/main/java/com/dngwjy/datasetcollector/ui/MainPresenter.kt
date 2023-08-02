@@ -1,9 +1,12 @@
 package com.dngwjy.datasetcollector.ui
 
 import com.dngwjy.datasetcollector.data.CrawledRequest
+import com.dngwjy.datasetcollector.data.DataSet
 import com.dngwjy.datasetcollector.data.Response
 import com.dngwjy.datasetcollector.logE
+import com.dngwjy.datasetcollector.util.RequestDataBuilder
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 
@@ -27,14 +30,16 @@ class MainPresenter(private val mainView: MainView) {
             }
         }
     }
-    private fun sendCrawledData(data: CrawledRequest){
+     fun sendCrawledData(data: MutableList<DataSet>,androidVersion:String){
         val scope = CoroutineScope(Dispatchers.Main)
+         val dataRequest= RequestDataBuilder.buildSendCrawledData(data,androidVersion)
         var res =""
         scope.launch {
             logE("")
-            Fuel.post("http://140.118.121.81:8080/api/crawling/").body(data.toJson()).response{
-                _,_, result->
-
+            Fuel.post("http://140.118.121.81:8080/api/crawling/").jsonBody(dataRequest.toJson()).response{
+                a,b, result->
+                logE(String(a.body.toByteArray()))
+                logE(result.toString())
             }
         }
     }
