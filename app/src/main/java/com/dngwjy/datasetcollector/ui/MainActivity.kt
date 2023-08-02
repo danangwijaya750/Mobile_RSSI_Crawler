@@ -586,7 +586,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
      * marker icons, which are vector drawables converted to bitmaps for custom marker icons.
      *
      * @see bitmapDescriptorFromVector
-     * @param showPoints A boolean flag indicating whether to display fingerprint points (true) or not (false).
+     * `showPoints` A boolean flag indicating whether to display fingerprint points (true) or not (false).
      * When set to true, the function will add markers to display fingerprint points based on defined
      * and crawled points on the map. When set to false, only the floor plan image will be displayed
      * without any fingerprint points.
