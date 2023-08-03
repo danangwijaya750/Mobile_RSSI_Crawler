@@ -51,14 +51,14 @@ class MainPresenter(private val mainView: MainView) {
          val dataRequest= RequestDataBuilder.buildSendCrawledData(data,androidVersion)
         var res =""
         scope.launch {
-            logE("")
             Fuel.post("http://140.118.121.81:8080/api/crawling/").jsonBody(dataRequest.toJson()).response{
                 a,b, result->
                 val(bytes,error)=result
                 if(error!=null){
+                    logE(error.message.toString())
                     mainView.resultUpload(false,error.message!!)
-                }
-                if(bytes!=null){
+                }else{
+                    bytes?.let { String(it) }?.let { logE(it) }
                     mainView.resultUpload(true,"")
                 }
             }

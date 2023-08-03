@@ -48,30 +48,140 @@ import java.util.*
  */
 class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarkerClickListener,SensorEventListener,
     MainView {
-    // Properties and variables
+    /**
+     * Instance of the MainPresenter class responsible for handling business logic and data processing
+     * for the main activity.
+     */
     private lateinit var presenter: MainPresenter
+    /**
+     * View binding instance for the main activity layout, which provides direct access to the UI elements
+     * in the layout XML file.
+     */
     private lateinit var binding: ActivityMainBinding
+    /**
+     * A mutable list of Point objects representing the defined fingerprint points on the map.
+     *
+     * This list contains Point objects that represent the defined fingerprint points for the selected
+     * building and floor. These points are used to display markers on the map and provide the location
+     * data for the fingerprint points. The points can be modified to add or remove defined points.
+     *
+     * Note: Ensure that the `Point` class or data structure used here is defined and implemented correctly
+     * to store latitude and longitude coordinates of the fingerprint points.
+     */
     private val definedPoints= mutableListOf<Point>()
+    /**
+     * A string representing the crawled fingerprint points on the map.
+     *
+     * This property stores a string representing the crawled fingerprint points for the selected building
+     * and floor. The crawled points are used to display markers on the map with different icons based on
+     * whether they have been crawled or not. The format of the string should be "latitude,longitude" to
+     * match the coordinates of the defined points.
+     */
     private var crawledPoints= ""
+    /**
+     * A boolean indicating whether to display defined fingerprint points on the map.
+     *
+     * This property controls the visibility of defined fingerprint points on the map. If set to true,
+     * defined points will be displayed as markers with custom icons. If set to false, the defined points
+     * will not be shown on the map.
+     */
     private var showPoints=true
+    /**
+     * An instance of the GoogleMap class representing the Google Map object.
+     *
+     * This property is used to interact with the Google Map fragment and perform operations such as
+     * adding markers, overlays, camera movements, and other map-related functions.
+     */
     private var mapView:GoogleMap?=null
+    /**
+     * An array of LatLng objects representing the South-East boundaries of buildings for different floors.
+     * currently is still hardcoded, but u can improve it to dynamic data from backend
+     *
+     * The array stores coordinates representing the South-East corner of buildings on the map. It helps
+     * in positioning the ground overlay of the floor plan image correctly for different buildings and
+     * floors.
+     *
+     * Example: southEast[buildingIndex]
+     *
+     * Note: Ensure that the coordinates are accurate and correspond to the correct South-East corners
+     * of the buildings on the map.
+     */
     private val southEast=arrayOf(LatLng(25.01159698395817, 121.54119884517124),LatLng(-7.771120618305493, 110.3868760009918))
+    /**
+     * An instance of the Marker class representing the pin marker on the map.
+     *
+     * This property is used to keep track of the current marker representing the user's position or
+     * selected point on the map.
+     */
     private var pinMarker:Marker?=null
+    /**
+     * An instance of the GroundOverlayOptions class representing the floor plan overlay on the map.
+     *
+     * This property is used to add a ground overlay with the floor plan image to the map.
+     */
     private lateinit var floorOverlay: GroundOverlayOptions
+    /**
+     * An instance of the Dialog class representing the custom dialog for user interactions.
+     *
+     * This property is used to create and display custom dialogs for various user interactions or alerts.
+     */
     private lateinit var dialog:Dialog
+    /**
+     * An instance of the SensorManager class to manage access to device sensors.
+     *
+     * This property is used to access and manage various device sensors, such as the geomagnetic sensor,
+     * accelerometer, gyroscope, and pressure sensor.
+     */
     private var sensorManager: SensorManager? = null
+    /**
+     * Instances of Sensor class representing different device sensors.
+     *
+     * These properties store references to the device sensors, including geomagnetic, accelerometer,
+     * gyroscope, and pressure sensors. They are used to register sensor listeners and retrieve sensor
+     * data when required.
+     */
     private var geomagneticSensor:Sensor?=null
     private var accelSensor:Sensor?=null
     private var gyroSensor:Sensor?=null
     private var pressureSensor:Sensor?=null
+    /**
+     * A 2D array representing the names of floors for different buildings.
+     *
+     * The array stores floor names for different buildings and is used to display floor options in the
+     * spinner UI element.
+     *
+     * Example: floorsName[buildingIndex][floorIndex]
+     */
     private var floorsName= arrayOf(
         arrayOf("1F Floor","6F Floor", "7F Floor","8F Floor"),
         arrayOf("Lt.1 Floor","Lt.2 Floor", "Lt.3 Floor"))
+    /**
+     * A 2D array representing the floor IDs for different buildings and floors.
+     *
+     * The array stores floor IDs corresponding to each building and floor combination. The floor IDs can
+     * be used for querying or identifying specific floors in the database or application logic.
+     *
+     * Example: floorsId[buildingIndex][floorIndex]
+     */
     private val floorsId= arrayOf(
         arrayOf("4","5","6","7"),
         arrayOf("1","2", "3")
     )
     private var selectedFloorId="1"
+    /**
+     * A 2D array representing the floor plan images for different buildings and floors.
+     * currently is still hardcoded, but u can improve it to dynamic data from backend
+     *
+     * The array stores resource IDs of floor plan images to be displayed as ground overlays on the map.
+     * The outer array represents different buildings, and the inner array represents different floors
+     * within each building. The index of the outer array corresponds to the selected building, and the
+     * index of the inner array corresponds to the selected floor within the building.
+     *
+     * Example: floors[buildingIndex][floorIndex]
+     *
+     * Note: Ensure that the resource IDs correspond to valid floor plan images stored in the drawable
+     * resources of the application.
+     */
     private val floors= arrayOf(
         //tw
         arrayOf(
@@ -82,27 +192,136 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
         ),
         //idb
         arrayOf(R.drawable.idb_lt1, R.drawable.idb_lt2, R.drawable.idb_lt3))
+    /**
+     * A 2D array representing the keys for crawled points for different buildings and floors.
+     *
+     * The array stores keys used to retrieve crawled points data from SharedPreferences or other storage
+     * mechanisms. It is organized based on different buildings and floors, and each key corresponds to the
+     * crawled points data for that specific floor.
+     *
+     * Example: crawledKeys[buildingIndex][floorIndex]
+     */
     private lateinit var crawledKeys:Array<Array<String>>
+    /**
+     * An array of float values representing the bearing angles for different buildings.
+     * Currently is still hardcoded but you can improve it to dynamic data from backend
+     *
+     * The array stores bearing angles (in degrees) used to rotate the map view for different buildings.
+     * The bearing angle represents the orientation or direction of the building on the map.
+     *
+     * Example: bearings[buildingIndex]
+     */
     private val bearings= arrayOf(46.3f,14.0f)
+    /**
+     * A 2D array representing the width and height of buildings for different floors.
+     * Currently is still hardcoded but you can improve it to dynamic data from backend
+     *
+     * The array stores width and height values of buildings on the map. It is used in conjunction with
+     * `southEast` array to determine the position of the ground overlay for the floor plan image. The
+     * outer array represents different buildings, and the inner array represents different floors within
+     * each building. The index of the outer array corresponds to the selected building, and the index of
+     * the inner array corresponds to the selected floor within the building.
+     *
+     * Example: buildingWH[buildingIndex][floorIndex]
+     *
+     * Note: Ensure that the width and height values are accurate and correspond to the actual dimensions
+     * of the buildings on the map.
+     */
     private val buildingWH= arrayOf(arrayOf(16.3f,80.68f), arrayOf(15f,50f))
+    /**
+     * Integer and float properties representing the selected floor, building, and bearing angle, respectively.
+     *
+     * These properties store the index of the selected floor within the building, the index of the selected
+     * building, and the bearing angle (in degrees) used to rotate the map view. They are updated based on
+     * user interactions or spinner selections to change the displayed floor plan and points on the map.
+     */
     private var selectedFloor=0
     private var selectedBuilding=0
     private var selectedBearing=0f
+    /**
+     * Mutable lists representing the current values of the geomagnetic, accelerometer, and gyroscope sensors.
+     *
+     * These lists are updated when sensor data changes, and they store the latest sensor readings for
+     * geomagnetic, accelerometer, and gyroscope sensors, respectively.
+     */
     private val currentGeo= mutableListOf<Float>()
     private val currentAccel= mutableListOf<Float>()
     private val currentGyro= mutableListOf<Float>()
+    /**
+     * Mutable lists representing the scanned BLE (Bluetooth Low Energy) devices and Wi-Fi access points.
+     *
+     * These lists store the scanned BLE devices and Wi-Fi access points' information obtained during the
+     * scanning process. They are used to display the scanned data and perform further operations or analysis.
+     */
     private val scannedBle= mutableListOf<BleData>()
     private val scannedWifi= mutableListOf<WifiData>()
+    /**
+     * Mutable list representing data sets for points.
+     *
+     * This list stores DataSet objects representing the data sets for different points on the map. The
+     * DataSet class (not provided in the code snippet) should be defined to store relevant data for points,
+     * such as coordinates, attributes, or other information.
+     */
     private val dataSets= mutableListOf<DataSet>()
+    /**
+     * A boolean indicating whether the scanning process is currently active.
+     *
+     * This property is used to track the scanning status and control the BLE and Wi-Fi scanning processes.
+     * It is set to true when the scanning process is active and false when the scanning process stops.
+     */
     private var isScanning=false
+    /**
+     * An instance of the BleManager class for handling BLE (Bluetooth Low Energy) operations.
+     *
+     * This property is used to interact with BLE devices, perform BLE scans, and manage Bluetooth operations.
+     */
     private lateinit var bleManager:BleManager
+    /**
+     * LatLng object representing the current latitude and longitude of the user's position.
+     *
+     * This property stores the current latitude and longitude coordinates of the user's position on the map.
+     * It is updated when the user's location changes or when a new position is selected on the map.
+     */
     private var curLatLng=LatLng(0.0,0.0)
+    /**
+     * String representing the file name for saving data.
+     *
+     * This property stores the file name used to save data or crawled points to a file or database.
+     * The file name is updated based on specific operations or user interactions.
+     */
     private var fileName=""
+    /**
+     * Integer representing the maximum data value.
+     *
+     * This property stores the maximum data value used for calculations or comparisons in the application.
+     * The value may change based on specific scenarios or data processing requirements.
+     */
     private var maxData=0
+    /**
+     * View binding instance for the custom dialog layout, which provides direct access to the UI elements
+     * in the custom dialog layout XML file.
+     */
     private lateinit var sheetView : LayoutDialogBinding
+    /**
+     * An instance of the WifiManager class for managing Wi-Fi operations.
+     *
+     * This property is used to interact with the Wi-Fi service, perform Wi-Fi scans, and manage Wi-Fi operations.
+     */
     private lateinit var wifiManger :WifiManager
+    /**
+     * Boolean properties indicating the current mode of operation for BLE and Wi-Fi scanning.
+     *
+     * These properties are used to determine whether the application is in BLE mode, Wi-Fi mode, or both.
+     * They are updated based on user preferences or specific scanning scenarios.
+     */
     private var bleMode=false
     private var wifiMode=false
+    /**
+     * Instance of the SharedPef class for managing shared preferences.
+     *
+     * This property is used to interact with shared preferences to save and retrieve data persistently
+     * across app sessions.
+     */
     private lateinit var sharedPref:SharedPef
 
     /**
