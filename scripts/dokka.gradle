@@ -8,6 +8,9 @@ dokkaHtml {
             jdkVersion.set(8)
             includeNonPublic.set(true)
             skipEmptyPackages.set(true)
+            pluginsMapConfiguration.set(
+                    ["org.jetbrains.dokka.base.DokkaBase": """{ "separateInheritedMembers": true}"""]
+            )
         }
     }
 }
