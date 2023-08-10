@@ -22,11 +22,10 @@ This project involves the development of a mobile Android app for RSSI data craw
 |   |   |__ androidTest #Instrument test code
 |__ docs #Markdown file for documentation
 |__ build #Project level build output directory
+|__ dokka #KDocs file
+|__ scripts #Other gradle scripts
 |__ gradle #gradle properties file
 ```
-
-## Architecture
-
 
 ## Setup
 1. Clone the repo.
@@ -52,9 +51,16 @@ This project involves the development of a mobile Android app for RSSI data craw
 ## App Demo :
 
 ## Crawling Method :
+Crawling process using 4 android smartphones with specs:
+- Xiaomi Redmi Note 8
+- Nokia 5.4 
+- Samsung Galaxy A22 
+- Xiaomi Poco F3
 ## Crawling Result :
+All crawled RSSI Raw data at UNY building are uploaded on [Google Drive](https://drive.google.com/drive/folders/1HhX77txKW5WwzeOSNy21TfO1D4Qw7fOa?usp=sharing)
 ## Data Cleansing :
-## Data Preprocessing :
-## Model Training :
+Run the data cleansing on [Google Colab](https://colab.research.google.com/drive/1qpv0opKzdw02QrMlnmC5_ZeHsrlF7to3?usp=sharing)
+## Data Preprocessing and Training :
+Run the data preprocessing and training on [Google Colab](https://colab.research.google.com/drive/1XY_0tv3KCQmeVUGN1-bhtpu1Ugq4Dgit?usp=sharing)
 
 
