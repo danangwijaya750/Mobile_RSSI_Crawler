@@ -63,4 +63,20 @@ Run the data cleansing on [Google Colab](https://colab.research.google.com/drive
 ## Data Preprocessing and Training :
 Run the data preprocessing and training on [Google Colab](https://colab.research.google.com/drive/1XY_0tv3KCQmeVUGN1-bhtpu1Ugq4Dgit?usp=sharing)
 
+## Licensee
+This project is licensed under the GNU General Public License version 3 (GPL-3.0).
 
+### Permissions
+- You are free to use, modify, and distribute this Software.
+- You can use the Software for both personal and commercial purposes.
+
+### Conditions
+- Any modifications or derivative works based on this Software must also be licensed under the GPL-3.0.
+- You must include a copy of the GPL-3.0 license along with the Software.
+
+### Limitations
+- The Software comes with no warranties and no liability. You assume all risks in using the Software.
+
+### Full License Text
+The full text of the GNU General Public License version 3 can be found at:
+[GPL-3.0 License](https://www.gnu.org/licenses/gpl-3.0.en.html)
