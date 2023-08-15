@@ -1,6 +1,5 @@
-package com.dngwjy.datasetcollector.ui
+package com.dngwjy.datasetcollector.ui.main
 
-import com.dngwjy.datasetcollector.data.CrawledRequest
 import com.dngwjy.datasetcollector.data.DataSet
 import com.dngwjy.datasetcollector.data.Response
 import com.dngwjy.datasetcollector.logE

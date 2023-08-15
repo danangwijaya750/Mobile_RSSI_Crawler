@@ -1,4 +1,4 @@
-package com.dngwjy.datasetcollector.ui
+package com.dngwjy.datasetcollector.ui.main
 
 import android.Manifest
 import android.app.Dialog
