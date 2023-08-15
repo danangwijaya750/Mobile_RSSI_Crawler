@@ -50,7 +50,7 @@ class MainPresenter(private val mainView: MainView) {
          val dataRequest= RequestDataBuilder.buildSendCrawledData(data,androidVersion)
         var res =""
         scope.launch {
-            Fuel.post("http://140.118.121.81:8080/api/crawling/").jsonBody(dataRequest.toJson()).response{
+            Fuel.post("").jsonBody(dataRequest.toJson()).response{
                 a,b, result->
                 val(bytes,error)=result
                 if(error!=null){
@@ -73,7 +73,7 @@ class MainPresenter(private val mainView: MainView) {
         val scope= CoroutineScope(Dispatchers.Main)
         var res=""
         scope.launch {
-            Fuel.post("http://140.118.121.81:8080/api/handsets/").body(data).response{
+            Fuel.post("").body(data).response{
                 _,_,result->
 
             }
