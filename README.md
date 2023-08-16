@@ -49,7 +49,7 @@ This project involves the development of a mobile Android app for RSSI data craw
 5. [Convert crawled data to .csv format](https://github.com/danangwijaya750/Mobile_RSSI_Crawler/blob/main/docs/CsvFileWriter.md)
 
 ## App Demo :
-
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/89Mc40a0X2o/0.jpg)](https://www.youtube.com/watch?v=89Mc40a0X2o)
 ## Crawling Method :
 Crawling process using 4 android smartphones with specs:
 - Xiaomi Redmi Note 8
