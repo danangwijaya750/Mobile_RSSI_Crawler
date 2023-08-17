@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>drawFloor</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>    <script>const storage = localStorage.getItem("dokka-dark-mode")
+const savedDarkMode = storage ? JSON.parse(storage) : false
+if(savedDarkMode === true){
+    document.getElementsByTagName("html")[0].classList.add("theme-dark")
+}</script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script><link href="../../../styles/style.css" rel="Stylesheet"><link href="../../../styles/jetbrains-mono.css" rel="Stylesheet"><link href="../../../styles/main.css" rel="Stylesheet"><link href="../../../styles/prism.css" rel="Stylesheet"><link href="../../../styles/logo-styles.css" rel="Stylesheet"><script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script><script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script><script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script><script type="text/javascript" src="../../../scripts/main.js" async="async"></script><script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>  </head>
+  <body>
+    <div class="navigation-wrapper" id="navigation-wrapper">
+      <div id="leftToggler"><span class="icon-toggler"></span></div>
+      <div class="library-name"><a href="../../../index.html">app</a></div>
+      <div></div>
+      <div class="pull-right d-flex"><button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+      </div>
+    </div>
+    <div id="container">
+      <div id="leftColumn">
+        <div id="sideMenu"></div>
+      </div>
+      <div id="main"><script type="text/javascript" src="../../../scripts/main.js"></script>
+        <div class="main-content" id="content" pageIds="app::com.dngwjy.datasetcollector.ui.main/MainActivity/drawFloor/#/PointingToDeclaration//492899073">
+          <div class="breadcrumbs"><a href="../../../index.html">app</a>/<a href="../index.html">com.dngwjy.datasetcollector.ui.main</a>/<a href="index.html">MainActivity</a>/<a href="draw-floor.html">drawFloor</a></div>
+          <div class="cover ">
+            <h1 class="cover"><span>draw</span><wbr></wbr><span><span>Floor</span></span></h1>
+          </div>
+          <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-depenent-content" data-active="" data-togglable=":app:dokkaHtml/release"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword"></span><span class="token keyword">fun </span><a href="draw-floor.html"><span class="token function">drawFloor</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="top-right-position"><span class="copy-icon"></span><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div></span></div><p class="paragraph">Draw the floor plan and fingerprint points on the Google Map.</p><p class="paragraph">This function is responsible for displaying the floor plan image as a ground overlay on the map. The overlay is positioned according to the selected building and floor. It also adds markers to display fingerprint points based on defined and crawled points. The color of the markers depends on whether the point has been crawled or not. If <code class="lang-kotlin">showPoints</code> is true, the fingerprint points will be displayed with appropriate markers. If <code class="lang-kotlin">showPoints</code> is false, only the floor plan image will be displayed without any fingerprint points.</p><p class="paragraph">Note: This function will clear the current map and reset the overlay and markers to display the selected floor's data. It utilizes the <code class="lang-kotlin">floors</code>, <code class="lang-kotlin">southEast</code>, <code class="lang-kotlin">buildingWH</code>, <code class="lang-kotlin">definedPoints</code>, <code class="lang-kotlin">crawledPoints</code>, and <code class="lang-kotlin">selectedBuilding</code> variables to determine the data to be displayed.</p><p class="paragraph">Important: Make sure that <code class="lang-kotlin">mapView</code> is properly initialized and available for displaying the map before calling this function. Additionally, a marker click listener is set on the map to allow opening the crawl dialog for a specific fingerprint point.</p><p class="paragraph">Note: The <code class="lang-kotlin">bitmapDescriptorFromVector</code> function is used to create bitmap descriptors for the marker icons, which are vector drawables converted to bitmaps for custom marker icons.</p><h2 class="">See also</h2><div data-togglable="See also"><div class="table" data-togglable="See also"><div class="table-row" data-filterable-current=":app:dokkaHtml/release" data-filterable-set=":app:dokkaHtml/release"><div class="main-subrow keyValue WithExtraAttributes"><div class=""><span class="inline-flex"><a href="../../com.dngwjy.datasetcollector/bitmap-descriptor-from-vector.html">bitmapDescriptorFromVector</a></span></div><div><div class="title"><div data-togglable="See also"><p class="paragraph"><code class="lang-kotlin">showPoints</code> A boolean flag indicating whether to display fingerprint points (true) or not (false). When set to true, the function will add markers to display fingerprint points based on defined and crawled points on the map. When set to false, only the floor plan image will be displayed without any fingerprint points.</p></div></div></div></div></div></div></div></div></div>
+        </div>
+        <div class="footer"><span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2023 Copyright</span><span class="pull-right"><span>Generated by </span><a href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span></div>
+      </div>
+    </div>
+  </body>
+</html>
+
