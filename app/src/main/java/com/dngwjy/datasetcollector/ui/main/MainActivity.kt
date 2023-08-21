@@ -488,7 +488,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
                         .setCancelable(false)
                         .show()
                 } else {
-                    val rule= BleScanRuleConfig.Builder().setScanTimeOut(5000).build()
+                    val rule= BleScanRuleConfig.Builder().setScanTimeOut(2000).build()
                     bleManager.initScanRule(rule)
                     bleManager.init(application)
                     bleManager.enableBluetooth()
@@ -505,8 +505,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
      */
     private fun initSensor(){
         // Initialize BLE manager and enable Bluetooth
+        val rule= BleScanRuleConfig.Builder().setScanTimeOut(2000).build()
         bleManager= BleManager.getInstance()
-        val rule= BleScanRuleConfig.Builder().setScanTimeOut(5000).build()
         bleManager.initScanRule(rule)
         bleManager.init(application)
         bleManager.enableBluetooth()
