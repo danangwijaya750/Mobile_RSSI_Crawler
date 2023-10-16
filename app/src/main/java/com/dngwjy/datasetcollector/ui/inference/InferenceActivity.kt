@@ -3,7 +3,7 @@ package com.dngwjy.datasetcollector.ui.inference
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.dngwjy.datasetcollector.databinding.ActivityInferenceBinding
-import com.dngwjy.datasetcollector.toast
+import com.dngwjy.datasetcollector.util.toast
 
 class InferenceActivity : AppCompatActivity(),InferenceView {
     private lateinit var binding:ActivityInferenceBinding

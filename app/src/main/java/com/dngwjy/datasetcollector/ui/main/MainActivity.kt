@@ -34,7 +34,7 @@ import com.dngwjy.datasetcollector.*
 import com.dngwjy.datasetcollector.data.*
 import com.dngwjy.datasetcollector.databinding.ActivityMainBinding
 import com.dngwjy.datasetcollector.databinding.LayoutDialogBinding
-import com.dngwjy.datasetcollector.util.FileWriter
+import com.dngwjy.datasetcollector.util.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback

@@ -3,7 +3,6 @@ package com.dngwjy.datasetcollector.util
 import android.content.Context
 import com.dngwjy.datasetcollector.ui.main.MainActivity
 import com.dngwjy.datasetcollector.data.DataSet
-import com.dngwjy.datasetcollector.logE
 import java.io.File
 
 /**

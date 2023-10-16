@@ -2,7 +2,7 @@ package com.dngwjy.datasetcollector.ui.main
 
 import com.dngwjy.datasetcollector.data.DataSet
 import com.dngwjy.datasetcollector.data.Response
-import com.dngwjy.datasetcollector.logE
+import com.dngwjy.datasetcollector.util.logE
 import com.dngwjy.datasetcollector.util.RequestDataBuilder
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.jsonBody
