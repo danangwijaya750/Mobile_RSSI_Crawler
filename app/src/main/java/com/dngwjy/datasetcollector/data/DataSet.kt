@@ -39,6 +39,7 @@ data class WifiData(
  * @param gyro The list of gyroscope data associated with the dataset.
  */
 data class DataSet (
+    var phone_id:String,
     var time_stamp:String,
     var latitude:Double,
     var longitude:Double,

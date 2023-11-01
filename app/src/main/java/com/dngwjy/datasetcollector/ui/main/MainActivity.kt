@@ -1,6 +1,7 @@
 package com.dngwjy.datasetcollector.ui.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
@@ -864,22 +865,26 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMarker
             val writer = FileWriter(this)
             logE(dataSets.toString())
             val result = writer.writeToFile(dataSets, fileName)
-            presenter.sendCrawledData(
-                dataSets,
-                androidVersion = android.os.Build.VERSION.CODENAME.toString()
-            )
+//            presenter.sendCrawledData(
+//                dataSets,
+//                androidVersion = android.os.Build.VERSION.CODENAME.toString()
+//            )
             toast("File saved in $result")
+            sheetView.pbScanning.toGone()
+            sheetView.btnStart.toVisible()
+            sheetView.btnStop.toGone()
         }
     }
     /**
      * Adds data to the dataSets list.
      * Data from scanned BLE and WiFi devices is added to the list.
      */
+    @SuppressLint("HardwareIds")
     private fun addData(){
         // Add data from scanned BLE and WiFi devices to the dataSets list
         dataSets
             .add(
-                DataSet(Calendar.getInstance().time.toString(),
+                DataSet(Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID),Calendar.getInstance().time.toString(),
                     curLatLng.latitude,curLatLng.longitude,
                     scannedBle.toMutableList(), scannedWifi.toMutableList(),currentGeo,currentAccel,currentGyro)
             )

@@ -68,7 +68,7 @@ class FileWriter(private val context: Context) {
                 }
 
                 // Write the data to the file
-                out.println("${dataSet.time_stamp};${dataSet.latitude};${dataSet.longitude}${bles}${wifis}${accels}${geos}${gyros}")
+                out.println("${dataSet.phone_id};${dataSet.time_stamp};${dataSet.latitude};${dataSet.longitude}${bles}${wifis}${accels}${geos}${gyros}")
             }
         }
 
